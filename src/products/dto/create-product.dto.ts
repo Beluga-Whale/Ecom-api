@@ -5,3 +5,8 @@ export class CreateProductDto {
   price: number;
   stock: number;
 }
+
+export class CalculatePrice {
+  _id: string;
+  quantity: number;
+}

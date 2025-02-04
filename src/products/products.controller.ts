@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
+import { CalculatePrice, CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -14,5 +14,10 @@ export class ProductsController {
   @Get()
   findAll(@Query('page') page: number, @Query('limit') limit: number) {
     return this.productsService.findAll(page, limit);
+  }
+
+  @Post('calculate-price')
+  calculatePrice(@Body() payload: CalculatePrice[]) {
+    return this.productsService.calculatePrice(payload);
   }
 }

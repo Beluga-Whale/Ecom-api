@@ -9,13 +9,13 @@ export class Cart {
     {
       productId: { type: Types.ObjectId, ref: 'Product', required: true },
       quantity: { type: Number, required: true, min: 1 },
-      priceTotal: { type: Number, required: true, min: 0 },
+      price: { type: Number, required: true, min: 0 },
     },
   ])
   productsList: {
     productId: Types.ObjectId;
     quantity: number;
-    priceTotal: number;
+    price: number;
   };
 
   @Prop({ type: Number, required: true, min: 0 })
