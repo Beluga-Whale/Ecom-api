@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { CalculatePrice } from './dto/create-cart.dto';
 
+import { InjectModel } from '@nestjs/mongoose';
+import { Cart, CartDocument } from './schemas/cart.schema';
+import { Model } from 'mongoose';
+import { Product } from 'src/products/schemas/product.schema';
 @Injectable()
 export class CartsService {
-  create(createCartDto: CreateCartDto) {
-    return 'This action adds a new cart';
-  }
+  constructor(
+    @InjectModel(Cart.name) private cartModel: Model<CartDocument>,
+    @InjectModel(Product.name) private productModel: Model<Product>,
+  ) {}
 
-  findAll() {
-    return `This action returns all carts`;
-  }
+  async calculatePrice(products: CalculatePrice[]) {
+    const discount: number[] = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
+    let totalPrice = 0;
 
-  findOne(id: number) {
-    return `This action returns a #${id} cart`;
-  }
+    const productAll = products.map((item: CalculatePrice) => item._id); // NOTE - ดูว่ามีProduct _id กี่ประเภท
+    for (const item of products) {
+      const product = await this.productModel.findById(item._id).exec();
+      if (product) {
+        totalPrice += product.price * item.quantity;
+      }
+    }
+    if (productAll.length > 1) {
+      const priceDiscount =
+        productAll.length * 100 * discount[productAll.length - 2];
 
-  update(id: number, updateCartDto: UpdateCartDto) {
-    return `This action updates a #${id} cart`;
-  }
+      totalPrice -= priceDiscount;
+      return totalPrice;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
+    return totalPrice;
   }
 }
