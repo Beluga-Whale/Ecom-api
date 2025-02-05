@@ -3,5 +3,4 @@ export class CreateProductDto {
   imgProduct: string;
   desc: string;
   price: number;
-  stock: number;
 }

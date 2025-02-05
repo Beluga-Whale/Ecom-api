@@ -8,8 +8,8 @@ export class Cart {
   @Prop([
     {
       productId: { type: Types.ObjectId, ref: 'Product', required: true },
-      quantity: { type: Number, required: true, min: 1 },
-      price: { type: Number, required: true, min: 0 },
+      quantity: { type: Number, required: true },
+      price: { type: Number, required: true },
     },
   ])
   productsList: {
